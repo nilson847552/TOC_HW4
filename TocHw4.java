@@ -11,9 +11,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.*;
+
 
 public class TocHw4 {
 	
@@ -160,6 +164,7 @@ public class TocHw4 {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args) throws MalformedURLException, JSONException {
 		// hashMap <"地址",該地址的交易信息>
 		HashMap<String, TransactionInformation> hashMap = new HashMap<String, TransactionInformation>();
@@ -179,6 +184,8 @@ public class TocHw4 {
 		int max_distinct_month = 0;
 		// winners 最多交易月份的地址們 (可能有多筆,就用Array)
 		ArrayList<String> winners = new ArrayList<String>();
+		Integer arriveTime = 0;
+		final HashMap<String , Integer> time = new HashMap<String , Integer>();
 
 		// 對每個JSONObject
 		for (int index = 0; index < JSONArray.length(); index++) {
@@ -201,6 +208,9 @@ public class TocHw4 {
 				else {
 					// 新增一個交易信息
 					hashMap.put(roadname, transactionInfo = new TransactionInformation());
+					// 新增時間
+					arriveTime++;
+					time.put(roadname, arriveTime);
 					// 該交易信息新增一筆交易
 					transactionInfo.addTransaction(price, month);
 				}
@@ -217,10 +227,15 @@ public class TocHw4 {
 				
 
 			} catch (Exception e) {
-				// System.out.println(index+" "+c.toString());//return;
-
 			}
 		}
+		// 排序
+		Collections.sort(winners, new Comparator() {
+			@Override
+			public int compare(Object arg0, Object arg1) {
+				return time.get(arg0)-time.get(arg1);
+			}
+		});
 
 		// 貼出結果
 		for (String s : winners)
