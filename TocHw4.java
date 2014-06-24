@@ -92,22 +92,31 @@ public class TocHw4 {
 
 	// 擷取 路,街,巷,地號 之前的文字
 	public static String getRoadName(String input) {
-		char[] strings = { '路', '街', '巷' };
+		char[] strings = { '路', '街' };
 		int index = 0;
 		for (char s : strings)
 			for (index = 0; index < input.length(); index++)
 				if (input.charAt(index) == s)
 					return input.substring(0, index + 1);
-		// 地號的情形
-		String pattern = "地號";
+		// 大道的情形
+		String pattern = "大道";
 		KMPMatch c = new KMPMatch(input, pattern);
 		if (c.match(0))
 			return input.substring(0, c.getMatchPoint() + pattern.length());
-		// 大道的情形
-		pattern = "大道";
+		
+		strings = new char[]{ '巷' };
+		index = 0;
+		for (char s : strings)
+			for (index = 0; index < input.length(); index++)
+				if (input.charAt(index) == s)
+					return input.substring(0, index + 1);
+
+		// 地號的情形
+		pattern = "地號";
 		c = new KMPMatch(input, pattern);
 		if (c.match(0))
 			return input.substring(0, c.getMatchPoint() + pattern.length());
+		
 		// 坐駕的情形
 		pattern = "坐駕";
 		c = new KMPMatch(input, pattern);
@@ -118,6 +127,8 @@ public class TocHw4 {
 		c = new KMPMatch(input, pattern);
 		if (c.match(0))
 			return input.substring(0, c.getMatchPoint() + pattern.length());
+		
+		
 
 		return null;
 	}
